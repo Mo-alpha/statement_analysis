@@ -1,8 +1,5 @@
 import pandas as pd
 
-
-
-
 col_names = ['2020', '2019',  '2018', '2017',  '2016', '2015']
 bal_sheet = pd.read_excel("data\\Balance-Sheet.xlsx", index_col=0, header=None, names=col_names,)
 income_statement = pd.read_excel("data\\Income-Statement.xlsx", index_col=0, header=None, names=col_names)
@@ -27,8 +24,6 @@ def create_excel_wsheets(file_name, outputfile_name, sh_name='Sheet1'):
 
 	writer.save()
 
-# def file_formatting(file_name,):
-
 def h_analysis(file_name):
 	h_analysis_result = pd.DataFrame(file_name,)
 	years = ['2020', '2019',  '2018', '2017',  '2016', '2015']
@@ -48,8 +43,6 @@ def v_analysis(file_name):
 	return v_analysis_result
 
 def cash_ratio(file_name):
-	# for i in file_name.index:
-	# 	print(i)
 	data = [file_name.loc['Cash and cash equivalents'], file_name.loc['Current liabilities']]
 	cash_ratio_output = pd.DataFrame(columns=file_name.columns, index=None, data=data)
 	cash_ratio_output.loc['Cash ratio'] = (file_name.loc['Cash and cash equivalents'] / file_name.loc['Current liabilities'])
