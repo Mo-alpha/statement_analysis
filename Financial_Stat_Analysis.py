@@ -8,9 +8,21 @@ def file_select():
 	filename = askopenfilename()
 	return filename
 
-inputfile1 = "data\\Balance-Sheet.xlsx"
-inputfile2 = "data\\Income-Statement.xlsx"
-inputfile3 = "data\\Statement-of-Cash-Flows.xlsx"
+input_choice = input("The files are already linked? (y/n) ")
+if input_choice == 'y':
+	inputfile1 = "data\\Balance-Sheet.xlsx"
+	inputfile2 = "data\\Income-Statement.xlsx"
+	inputfile3 = "data\\Statement-of-Cash-Flows.xlsx"
+elif input_choice == 'n':
+	inputfile1 = file_select()
+	inputfile2 = file_select()
+	inputfile3 = file_select()
+else:
+	print("Please enter avalid response. ")
+
+# inputfile1 = "data\\Balance-Sheet.xlsx"
+# inputfile2 = "data\\Income-Statement.xlsx"
+# inputfile3 = "data\\Statement-of-Cash-Flows.xlsx"
 
 col_names = ['2020', '2019',  '2018', '2017',  '2016', '2015']
 bal_sheet = pd.read_excel(inputfile1, index_col=0, header=None, names=col_names,)
@@ -31,18 +43,20 @@ number = '#,##0.00'
 percentage = '0%'
 
 def create_excel_file(file_name, outputfile_name, sh_name='Sheet1', format_name=number):
-	writer = pd.ExcelWriter("results//" + outputfile_name,
-                        engine='xlsxwriter',)
+	writer = pd.ExcelWriter("results//" + outputfile_name, engine='xlsxwriter',)
 	file_name.to_excel(writer, sheet_name=sh_name,)
 	workbook  = writer.book
 	worksheet = writer.sheets[sh_name]
-	format1 = workbook.add_format({'num_format': format_name})
-	# formats = workbook.add_format()
-	# formats.set_align('left')
+	format1 = workbook.add_format({'num_format': format_name, 'align': 'right'})
+	format2 = workbook.add_format({'align': 'left'})
+
+	cell_format = workbook.add_format()
+	cell_format.set_align('center')
+	cell_format.set_bold(True)
+
 	worksheet.set_column('A:A', 23, )
 	worksheet.set_column('B:G', 10, format1,)
-	worksheet.write(0, 0, 'Items',)
-	# worksheet.set_column('A:C',5, format)
+	worksheet.write(0, 0, 'Items',cell_format)
 	writer.close()
 
 	return file_name
@@ -61,23 +75,6 @@ def create_excel_wsheets(inputfile_name, sh_name='Sheet1'):
 	df.to_excel(writer, sheet_name = sh_name)
 	writer.save()
 	writer.close()
-
-def h_analysis(file_name):
-	h_analysis_result = pd.DataFrame(file_name,)
-
-	for year in col_names:
-		h_analysis_result[year] = (((file_name[year] / file_name['2015'])) )
-
-	return h_analysis_result
-
-def v_analysis(file_name):
-	# rev_names = ['Revenues', 'Net sales', 'Sales', 'Total sales']
-	try:
-		v_analysis_result = ((file_name.loc[:] / file_name.loc['Total assets']))
-	except KeyError:
-		v_analysis_result = ((file_name.loc[:] / file_name.loc['Net sales']))
-
-	return v_analysis_result
 
 def cash_ratio(balance_sheet):
     data = [balance_sheet.loc['Cash and cash equivalents'], balance_sheet.loc['Current liabilities']]
@@ -215,13 +212,26 @@ def op_cash_pershare(balance_sheet, cash_flow):
 
 	return op_cash_pershare_output
 
+def h_analysis(file_name):
+	h_analysis_result =  pd.DataFrame(columns=file_name.columns, index=None, data=file_name)
+
+	for year in col_names:
+		h_analysis_result[year] = (file_name[year] / file_name['2015'])
+
+	return h_analysis_result
+
+def v_analysis(file_name):
+	# rev_names = ['Revenues', 'Net sales', 'Sales', 'Total sales']
+	v_analysis_result =  pd.DataFrame(columns=file_name.columns, index=None, data=file_name)
+	try:
+		v_analysis_result = ((file_name.loc[:] / file_name.loc['Total assets']))
+	except KeyError:
+		v_analysis_result = ((file_name.loc[:] / file_name.loc['Net sales']))
+
+	return v_analysis_result
 
 # create_excel_file(int_coverage_ratio(bal_sheet), "int_coverage_ratio.xlsx")
 
-create_excel_file(v_analysis(bal_sheet), "v_analysis_balance_sheet.xlsx", format_name=percentage)
-create_excel_file(v_analysis(income_statement), "v_analysis_income_statement.xlsx", format_name=percentage)
-create_excel_file(h_analysis(bal_sheet), "h_analysis_balance_sheet.xlsx", format_name=percentage)
-create_excel_file(h_analysis(income_statement), "h_analysis_income_statement.xlsx", format_name=percentage)
 create_excel_file(cash_ratio(bal_sheet), "cash_ratio.xlsx")
 create_excel_file(current_ratio(bal_sheet), "current_ratio.xlsx")
 create_excel_file(quick_ratio(bal_sheet), "quick_ratio.xlsx")
@@ -237,6 +247,11 @@ create_excel_file(roce(income_statement), "roce.xlsx")
 create_excel_file(op_avg_tot_liabities(bal_sheet, cash_flow_statement), "op_avg_tot_liabities.xlsx")
 create_excel_file(op_cash_div(bal_sheet, cash_flow_statement), "op_cash_div.xlsx")
 create_excel_file(op_cash_pershare(bal_sheet, cash_flow_statement), "op_cash_pershare.xlsx")
+
+create_excel_file(v_analysis(bal_sheet), "v_analysis_balance_sheet.xlsx", format_name=percentage)
+create_excel_file(v_analysis(income_statement), "v_analysis_income_statement.xlsx", format_name=percentage)
+create_excel_file(h_analysis(bal_sheet), "h_analysis_balance_sheet.xlsx", format_name=percentage)
+create_excel_file(h_analysis(income_statement), "h_analysis_income_statement.xlsx", format_name=percentage)
 
 print("\nDone.")
 print("Please check the excel files.")
