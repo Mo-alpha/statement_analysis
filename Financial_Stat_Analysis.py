@@ -137,10 +137,11 @@ def ltdb_eq_ratio(balance_sheet):
     return ltdb_eq_ratio_output
 
 def int_coverage_ratio(income_stat):
-    data = [income_stat.loc['Net income'], income_stat.loc['Interest expense'], income_stat.loc['Provision for income taxes'],
-    income_stat.loc['Interest expense'], income_stat.loc['Non controlling interests']]
+    data = [income_stat.loc['Net income'], income_stat.loc['Interest expense'], income_stat.loc['Provision for income taxes'],]
+     #income_stat.loc['Non controlling interests'], income_stat.loc['Interest expense']
     int_coverage_ratio_output = pd.DataFrame(columns=income_stat.columns, index=None, data=data)
-    int_coverage_ratio_output.loc['Interest coverage ratio'] = (income_stat.loc[''] / income_stat.loc[''])
+    int_coverage_ratio_output.loc['EBIT'] = (income_stat.loc['Net income'] + (income_stat.loc['Interest expense'] + income_stat.loc['Provision for income taxes']))
+    int_coverage_ratio_output.loc['Interest coverage ratio'] = (int_coverage_ratio_output.loc['EBIT'] / income_stat.loc['Interest expense'])
 
     return int_coverage_ratio_output
 
@@ -230,11 +231,10 @@ def v_analysis(file_name):
 
 	return v_analysis_result
 
-# create_excel_file(int_coverage_ratio(bal_sheet), "int_coverage_ratio.xlsx")
-
 create_excel_file(cash_ratio(bal_sheet), "cash_ratio.xlsx")
 create_excel_file(current_ratio(bal_sheet), "current_ratio.xlsx")
 create_excel_file(quick_ratio(bal_sheet), "quick_ratio.xlsx")
+create_excel_file(int_coverage_ratio(income_statement), "int_coverage_ratio.xlsx")
 create_excel_file(op_act_cl_ratio(bal_sheet, cash_flow_statement), "op_act_cl_ratio.xlsx")
 create_excel_file(liabilities_asset_ratio(bal_sheet), "liabilities_asset_ratio.xlsx")
 create_excel_file(liabilities_equity_ratio(bal_sheet), "liabilities_equity_ratio.xlsx")
@@ -248,10 +248,10 @@ create_excel_file(op_avg_tot_liabities(bal_sheet, cash_flow_statement), "op_avg_
 create_excel_file(op_cash_div(bal_sheet, cash_flow_statement), "op_cash_div.xlsx")
 create_excel_file(op_cash_pershare(bal_sheet, cash_flow_statement), "op_cash_pershare.xlsx")
 
-create_excel_file(v_analysis(bal_sheet), "v_analysis_balance_sheet.xlsx", format_name=percentage)
-create_excel_file(v_analysis(income_statement), "v_analysis_income_statement.xlsx", format_name=percentage)
-create_excel_file(h_analysis(bal_sheet), "h_analysis_balance_sheet.xlsx", format_name=percentage)
-create_excel_file(h_analysis(income_statement), "h_analysis_income_statement.xlsx", format_name=percentage)
+# create_excel_file(v_analysis(bal_sheet), "v_analysis_balance_sheet.xlsx", format_name=percentage)
+# create_excel_file(v_analysis(income_statement), "v_analysis_income_statement.xlsx", format_name=percentage)
+# create_excel_file(h_analysis(bal_sheet), "h_analysis_balance_sheet.xlsx", format_name=percentage)
+# create_excel_file(h_analysis(income_statement), "h_analysis_income_statement.xlsx", format_name=percentage)
 
 print("\nDone.")
 print("Please check the excel files.")
