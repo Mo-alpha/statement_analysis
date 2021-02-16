@@ -32,10 +32,10 @@ It then conducts various tests in the predifined functions and returns 20 excel 
 + Vertical Analysis of Financial Statements
 + Horizontal Analysis of Financial Statements
 
-##Note: The program requires the following items to exist in the financial statement to run properly.
+## Note
+The program requires the following items to exist in the financial statement to run properly.
 
-
-Balance sheet:
+## Balance sheet:
 +Cash and cash equivalents
 +Current assets
 +Current liabilities
