@@ -36,17 +36,17 @@ It then conducts various tests in the predifined functions and returns 20 excel 
 
 
 Balance sheet:
-    Cash and cash equivalents
-    Current assets
-    Current liabilities
-    Inventories
-    Total liabilities
-    Total assets
-    Non-current portion of term debt
-    Shareholders equity
-    Non-current portion of term debt
-    Shareholders equity
-    Non-current portion of term debt or Long-term debt or Longterm debt
++Cash and cash equivalents
++Current assets
++Current liabilities
++Inventories
++Total liabilities
++Total assets
++Non-current portion of term debt
++Shareholders equity
++Non-current portion of term debt
++Shareholders equity
++Non-current portion of term debt or Long-term debt or Longterm debt
 
 Income statement:
     Net income
